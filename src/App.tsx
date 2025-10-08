@@ -1,44 +1,27 @@
 import { type FC } from 'react';
-import { AppShell, Burger, createTheme } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { createTheme } from '@mantine/core';
 import { MantineProvider } from '@mantine/core';
+import { useState } from 'react';
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css';
+import { Login } from './components/Login';
+import Home from './features/home';
 
 const App: FC = () => {
-  const theme = createTheme({});
-  const [opened, { toggle }] = useDisclosure();
+  const theme = createTheme({
+    primaryColor: 'blue',
+    defaultRadius: 'md'
+  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <MantineProvider theme={theme}>
-    <AppShell
-      padding="md"
-      header={{ height: 60 }}
-      navbar={{
-        width: 300,
-        breakpoint: 'sm',
-        collapsed: { mobile: !opened },
-      }}
-    >
-      <AppShell.Header>
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          hiddenFrom="sm"
-          size="sm"
-        />
-        <div>Logo</div>
-      </AppShell.Header>
-      <AppShell.Navbar>
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          hiddenFrom="sm"
-          size="sm"
-        /></AppShell.Navbar>
-      <AppShell.Main>Main</AppShell.Main>
-    </AppShell>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      {!isLoggedIn ? (
+        <Login onLoginSuccess={() => setIsLoggedIn(true)} />
+      ) : (
+        <Home />
+      )}
     </MantineProvider>
   )
 }
